@@ -1,16 +1,38 @@
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { ContactForm } from './ContactForm/ContactForm';
+import { ContactList } from './ContactList/ContactList';
+import { Filter } from './Filter/Filter';
+import { GlobalStyle } from './GlobalStyle';
+import { Layout } from './Layout';
+import { selectEroor, selectLoading } from 'redux/contacts/contactsSlice';
+import { fetchContacts } from 'redux/contacts/operations';
+import { Loader } from './Loader';
+import { Error } from './Error/Error';
+
 export const App = () => {
+  const dispatch = useDispatch();
+  const isLoading = useSelector(selectLoading);
+  const isError = useSelector(selectEroor);
+
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
+
   return (
-    <div
-      style={{
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontSize: 40,
-        color: '#010101'
-      }}
-    >
-      React homework template
-    </div>
+    <Layout>
+      <h1>Phonebook</h1>
+      <ContactForm />
+      {isLoading && !isError && <Loader />}
+      {isError && <Error />}
+      {!isError && (
+        <>
+          <h2>Contacts</h2>
+          <Filter />
+          <ContactList />
+        </>
+      )}
+      <GlobalStyle />
+    </Layout>
   );
 };
