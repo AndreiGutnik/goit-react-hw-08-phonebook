@@ -27,3 +27,9 @@ export const handleDeleteContactFulfilled = (state, action) => {
   );
   state.contacts.splice(index, 1);
 };
+
+export const handleLogoutFulfilled = state => {
+  state.isLoading = false;
+  state.isError = null;
+  state.contacts = [];
+};

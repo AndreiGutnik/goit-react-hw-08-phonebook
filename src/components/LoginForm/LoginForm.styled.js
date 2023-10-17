@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { ImUser, ImPhone } from 'react-icons/im';
+import { ImMail3, ImKey } from 'react-icons/im';
 import { Form, Field } from 'formik';
 
 export const FormStyle = styled(Form)`
@@ -23,7 +23,7 @@ export const Input = styled(Field)`
   margin-top: 4px;
 `;
 
-export const IconUser = styled(ImUser)`
+export const IconEmail = styled(ImMail3)`
   position: absolute;
   top: 50%;
   left: 8px;
@@ -31,7 +31,7 @@ export const IconUser = styled(ImUser)`
   fill: #757575;
 `;
 
-export const IconPhone = styled(ImPhone)`
+export const IconPassword = styled(ImKey)`
   position: absolute;
   top: 50%;
   left: 8px;

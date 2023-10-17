@@ -1,11 +1,17 @@
-import styled from 'styled-components';
+import { Outlet } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
+import { Suspense } from 'react';
+import { AppBar } from './AppBar/AppBar';
+import { Container } from './Container';
 
-export const Layout = styled.div`
-  width: 400px;
-  margin: 24px auto;
-  padding: 12px;
-  border: 1px solid #000000;
-  border-radius: 12px;
-  box-shadow: 3px 3px 10px black;
-  background-color: #f4f4f4;
-`;
+export const Layout = () => {
+  return (
+    <Container>
+      <AppBar />
+      <Suspense fallback={null}>
+        <Outlet />
+      </Suspense>
+      <Toaster position="top-right" reverseOrder={false} />
+    </Container>
+  );
+};

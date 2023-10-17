@@ -6,8 +6,10 @@ import {
   handleRejected,
   handleAddContactFulfilled,
   handleDeleteContactFulfilled,
+  handleLogoutFulfilled,
 } from './hendlers';
 import { selectFilter } from 'redux/filter/filterSlice';
+import { logOut } from 'redux/auth/auth-operations';
 
 const contactsSlice = createSlice({
   name: 'contacts',
@@ -26,7 +28,8 @@ const contactsSlice = createSlice({
       .addCase(addContact.rejected, handleRejected)
       .addCase(deleteContact.pending, handlePanding)
       .addCase(deleteContact.fulfilled, handleDeleteContactFulfilled)
-      .addCase(deleteContact.rejected, handleRejected);
+      .addCase(deleteContact.rejected, handleRejected)
+      .addCase(logOut.fulfilled, handleLogoutFulfilled);
   },
 });
 

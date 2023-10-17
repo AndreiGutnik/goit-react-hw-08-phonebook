@@ -1,38 +1,64 @@
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { ContactForm } from './ContactForm/ContactForm';
-import { ContactList } from './ContactList/ContactList';
-import { Filter } from './Filter/Filter';
+import { lazy, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { GlobalStyle } from './GlobalStyle';
+import { Route, Routes } from 'react-router-dom';
 import { Layout } from './Layout';
-import { selectEroor, selectLoading } from 'redux/contacts/contactsSlice';
-import { fetchContacts } from 'redux/contacts/operations';
-import { Loader } from './Loader';
-import { Error } from './Error/Error';
+import { refreshUser } from 'redux/auth/auth-operations';
+import PrivateRoute from './PrivateRoute';
+import PublicRoute from './PublicRoute';
+import { routes } from 'routes';
+import { useAuth } from 'hooks/useAuth';
+
+const HomePage = lazy(() => import('../pages/Home'));
+const ContactsPage = lazy(() => import('../pages/Contacts'));
+const LoginPage = lazy(() => import('../pages/Login'));
+const RegisterPage = lazy(() => import('../pages/Register'));
 
 export const App = () => {
   const dispatch = useDispatch();
-  const isLoading = useSelector(selectLoading);
-  const isError = useSelector(selectEroor);
+  const { isRefreshing } = useAuth();
 
   useEffect(() => {
-    dispatch(fetchContacts());
+    dispatch(refreshUser());
   }, [dispatch]);
 
   return (
-    <Layout>
-      <h1>Phonebook</h1>
-      <ContactForm />
-      {isLoading && !isError && <Loader />}
-      {isError && <Error />}
-      {!isError && (
-        <>
-          <h2>Contacts</h2>
-          <Filter />
-          <ContactList />
-        </>
-      )}
-      <GlobalStyle />
-    </Layout>
+    !isRefreshing && (
+      <>
+        <Routes>
+          <Route path={routes.HOME} element={<Layout />}>
+            <Route index element={<HomePage />} />
+            <Route
+              path={routes.REGISTER}
+              element={
+                <PublicRoute
+                  redirectTo={routes.CONTACTS}
+                  component={RegisterPage}
+                />
+              }
+            />
+            <Route
+              path={routes.LOGIN}
+              element={
+                <PublicRoute
+                  redirectTo={routes.CONTACTS}
+                  component={LoginPage}
+                />
+              }
+            />
+            <Route
+              path={routes.CONTACTS}
+              element={
+                <PrivateRoute
+                  redirectTo={routes.LOGIN}
+                  component={ContactsPage}
+                />
+              }
+            />
+          </Route>
+        </Routes>
+        <GlobalStyle />
+      </>
+    )
   );
 };
